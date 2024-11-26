@@ -1,5 +1,4 @@
 import math
-
 from flask import render_template, request
 import dao
 from app import app
@@ -16,9 +15,19 @@ def index():
     total = dao.count_products()
     return render_template("index.html", categories=cates, products=prods, pages=math.ceil(total/page_size))
 
-@app.route('/register')
+@app.route('/register', methods=['get', 'post'])
 def register_view():
-    return render_template("register.html")
+    err_msg = ''
+    if request.method.__eq__('POST'):
+        password = request.form.get('password')
+        confirm = request.form.get('comfirm')
+        if not password.__eq__(confirm):
+            err_msg = 'Mật khẩu không khớp'
+        else:
+            pass
+
+    return render_template('register.html', err_msg=err_msg)
+
 
 
 if __name__ == '__main__':

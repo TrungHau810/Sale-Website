@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Enum
 from app import db, app
 import hashlib
 from enum import Enum as RoleEnum
@@ -11,21 +11,22 @@ class UserRole(RoleEnum):
 
 
 class User(db.Model):
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     username = Column(String(100), nullable=False, unique=True)
     password = Column(String(100), nullable=False)
     avatar = Column(String(100), nullable=True)
     active = Column(Boolean, default=True)
-
-
-    def __str__(self):
-        return self.name
+    user_role = Column(Enum(UserRole), default=UserRole.USER)
 
 
 class Category(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
     product = relationship('Product', backref='category', lazy=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Product(db.Model):
@@ -39,11 +40,12 @@ class Product(db.Model):
 
 if __name__ == '__main__':
     with app.app_context():
+        db.create_all()
         u = User(name="admin",username="admin", password=str(hashlib.md5("12345".encode('utf-8')).hexdigest()),
-                 avatar="https://res.cloudinary.com/dxxwcby8l/image/upload/v1647056401/ipmsmnxjydrhpo21xrd8.jpg")
-        db.session.add()
+                 avatar="https://res.cloudinary.com/dxxwcby8l/image/upload/v1647056401/ipmsmnxjydrhpo21xrd8.jpg",
+                 user_role=UserRole.ADMIN)
+        db.session.add(u)
         db.session.commit()
-        # db.create_all()
         # c1 = Category(name="Mobile")
         # c2 = Category(name="Tablet")
         # c3 = Category(name="Desktop")

@@ -20,6 +20,9 @@ class User(db.Model, UserMixin):
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.USER)
 
+    def __str__(self):
+        return self.name
+
 
 class Category(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -37,6 +40,9 @@ class Product(db.Model):
     price = Column(Float, default=0)
     image = Column(String(100), nullable=True)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+
+    def __str__(self):
+        return self.name
 
 
 if __name__ == '__main__':

@@ -1,11 +1,15 @@
-from app.models import Category, Product
+import hashlib
+from app import db
+from app.models import Category, Product, User
 from app import app
+import cloudinary.uploader
 
 
 def load_categories():
     return Category.query.order_by('id').all()
 
-def load_products(kw = None, page = 1):
+
+def load_products(kw=None, page=1):
     query = Product.query
 
     if kw:
@@ -20,3 +24,26 @@ def load_products(kw = None, page = 1):
 
 def count_products():
     return Product.query.count()
+
+
+def add_user(name, username, password, avatar):
+    password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
+
+    u = User(name=name, username=username, password=password,
+             avatar="https://res.cloudinary.com/dxxwcby8l/image/upload/v1647056401/ipmsmnxjydrhpo21xrd8.jpg")
+    if avatar:
+        res = cloudinary.uploader.upload(avatar)
+        u.avatar = res.get("secure_url")
+    db.session.add(u)
+    db.session.commit()
+
+
+def auth_user(username, password):
+    password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
+
+    return User.query.filter(User.username.__eq__(username),
+                             User.password.__eq__(password)).first()
+
+
+def get_user_by_id(id):
+    return User.query.get(id)

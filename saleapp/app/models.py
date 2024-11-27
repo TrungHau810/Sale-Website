@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, Enum
 from app import db, app
 import hashlib
 from enum import Enum as RoleEnum
+from flask_login import UserMixin
 
 
 class UserRole(RoleEnum):
@@ -10,7 +11,7 @@ class UserRole(RoleEnum):
     USER = 2
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
     username = Column(String(100), nullable=False, unique=True)

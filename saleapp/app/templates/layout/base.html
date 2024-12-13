@@ -23,8 +23,9 @@
 </section>
 
 {% block footer %}
-{% include 'layout/footer.html' %}
+    {% include 'layout/footer.html' %}
 {% endblock %}
 
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

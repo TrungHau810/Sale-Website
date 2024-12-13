@@ -32,8 +32,9 @@
                     <a class="nav-link text-danger" href="/register">Đăng ký</a>
                 </li>
                 {% endif %}
-
-
+                <li class="nav-item">
+                    <a class="nav-link active" href="/cart">&#128722; <span class="badge bg-danger cart-counter">{{ cart_stats.total_quantity }}</span></a>
+                </li>
             </ul>
             <form method="get" action="/" class="d-flex">
                 <input class="form-control me-2" type="text" placeholder="Tìm kiếm..." name="kw"/>

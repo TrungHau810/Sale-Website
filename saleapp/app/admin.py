@@ -1,3 +1,5 @@
+from tkinter.font import names
+
 from app import db, app
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
@@ -21,10 +23,12 @@ class CategoryView(AuthenticatedView):
     column_filters = ['id', 'name']
     can_view_details = True
     column_list = ['name', 'product']
+    # can_set_page_size = True
 
 
 class ProductView(AuthenticatedView):
-    pass
+    can_view_details = True
+
 
 
 class MyView(BaseView):
@@ -38,7 +42,7 @@ class LogoutView(MyView):
         logout_user()
         return redirect('/admin')
 
- class StatsView(MyView):
+class StatsView(MyView):
      @expose("/")
      def index(self):
          return self.render('admin/stats.html')
